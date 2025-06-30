@@ -16,7 +16,7 @@ if (!cached) {
   cached = global.mongoose = { conn: null, promise: null };
 }
 
-export async function connectToDatabase(): Promise<Connection> {
+export default async function connectToDatabase(): Promise<Connection> {
   if (cached.conn) {
     console.log("✅ Using existing MongoDB connection");
     return cached.conn;
