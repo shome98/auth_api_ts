@@ -32,7 +32,7 @@ const UserSchema: Schema<IUser> = new Schema(
       lowercase: true,
       trim: true,
     },
-    username: { type: String, required: true, unique: true, trim: true },
+    username: { type: String, required: false, unique: true, trim: true },
     password: { type: String, required: true },
     fullName: { type: String, default: "" },
     bio: { type: String, default: "" },
@@ -75,4 +75,4 @@ UserSchema.methods.comparePassword = async function (
   return bcrypt.compare(candidatePassword, this.password);
 };
 
-export default mongoose.models.User || model<IUser>("User", UserSchema);
+export const User= mongoose.models.User || model<IUser>("User", UserSchema);
