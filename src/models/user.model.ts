@@ -1,25 +1,27 @@
 import mongoose, { Document, Schema, Model, model } from "mongoose";
 import bcrypt from "bcryptjs";
 
-export interface IUser extends Document {
+export interface IUserAddress {
+  address?: string | null;
+  city?: string | null;
+  country?: string | null;
+  pincode: number | null;
+}
+export interface IUser extends Document, IUserAddress {
   email: string;
   username: string | null;
   password: string;
-  fullName: string | null;
-  bio: string | null;
-  profilePicture: string | null;
+  fullName?: string | null;
+  bio?: string | null;
+  profilePicture?: string | null;
   roles: string[] | null;
-  emailVerified: boolean | false;
-  twoFactorEnabled: boolean | false;
+  emailVerified?: boolean | false;
+  twoFactorEnabled?: boolean | false;
   twoFactorSecret?: string | null;
   resetPasswordToken?: string | null;
   resetPasswordExpires?: Date | null;
   refreshToken?: string | null;
   refreshTokenExpires?: Date | null;
-  address?: string | null;
-  city?: string | null;
-  country?: string | null;
-  pincode: number | null;
   comparePassword(candidatePassword: string): Promise<boolean>;
 }
 
@@ -32,8 +34,8 @@ const UserSchema: Schema<IUser> = new Schema(
       lowercase: true,
       trim: true,
     },
-    username: { type: String, required: false, unique: true, trim: true },
-    password: { type: String, required: true },
+    username: { type: String, required: false, trim: true },
+    password: { type: String, required: true, select: false },
     fullName: { type: String, default: "" },
     bio: { type: String, default: "" },
     profilePicture: { type: String, default: "" },
@@ -75,4 +77,4 @@ UserSchema.methods.comparePassword = async function (
   return bcrypt.compare(candidatePassword, this.password);
 };
 
-export const User= mongoose.models.User || model<IUser>("User", UserSchema);
+export const User = mongoose.models.User || model<IUser>("User", UserSchema);
