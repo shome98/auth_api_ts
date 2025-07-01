@@ -1,15 +1,15 @@
 import { Request, Response } from "express";
 import { IUser } from "../models/user.model";
-import { createUser, findExistingUserByEmail } from "../utils/user.services";
+import { createUser, findExistingUserByEmail, findExistingUserWithPassword } from "../utils/user.services";
 
 export const register = async (req: Request, res: Response) => {
   const reqObj: IUser = req.body;
   const { email, password } = reqObj;
   if (!email) {
-    return res.json({ error: "😒 Please enter a valid email to continue." });
+    return res.status(400).json({ error: "😒 Please enter a valid email to continue." });
   }
   if (!password) {
-    return res.json({ error: "😒 Please enter a valid password to continue." });
+    return res.status(400).json({ error: "😒 Please enter a valid password to continue." });
   }
   try {
     const existingUser = await findExistingUserByEmail(email);
@@ -27,3 +27,18 @@ export const register = async (req: Request, res: Response) => {
     return res.status(500).json({ error: "⚠️ Failed to register the user." });
   }
 };
+
+export const login = async (req: Request, res: Response) => {
+    const { email, username, password } = req.body;
+    if (!email && !username) {
+      return res.status(400).json({error: "😒Please provide either an email or a username to continue.",});
+    }
+    if (!password) {
+        return res.status(400).json({error: "😒Please provide password to continue.",});
+    }
+    const existingUser = await findExistingUserWithPassword(email, username);
+    if (!existingUser.comparePassword(password)) {
+        return res.status(401).json({ error: "❌ Invalid password." });
+    }
+    const accessToken = "";
+}
