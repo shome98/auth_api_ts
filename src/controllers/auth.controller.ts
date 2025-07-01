@@ -1,9 +1,9 @@
 import { Request, Response } from "express";
-import { IUser, User } from "../models/user.model";
+import { IUser } from "../models/user.model";
+import { createUser, findExistingUserByEmail } from "../utils/user.services";
 
 export const register = async (req: Request, res: Response) => {
-    const reqObj: IUser = req.body;
-    console.log(reqObj);
+  const reqObj: IUser = req.body;
   const { email, password } = reqObj;
   if (!email) {
     return res.json({ error: "😒 Please enter a valid email to continue." });
@@ -12,18 +12,13 @@ export const register = async (req: Request, res: Response) => {
     return res.json({ error: "😒 Please enter a valid password to continue." });
   }
   try {
-    const existingUser = await User.findOne({ email });
+    const existingUser = await findExistingUserByEmail(email);
     if (existingUser) {
-      return res
-        .status(401)
-        .json({
-          error: "😊 Provided email is already associated with an account.",
-        });
+      return res.status(409).json({
+        error: "😊 Provided email is already associated with an account.",
+      });
     }
-    const newUser = await User.create({ ...reqObj });
-    // if (newUser) {
-    //     return res.status(201).json({ message: "✅ User registered successfully.", user: newUser });
-    // }
+    const newUser = await createUser(reqObj);
     return res
       .status(201)
       .json({ message: "✅ User registered successfully.", user: newUser });
