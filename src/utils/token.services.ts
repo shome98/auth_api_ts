@@ -1,0 +1,33 @@
+import jwt from "jsonwebtoken";
+import config from "../environment/config";
+import { IUser } from "../models/user.model";
+export function generateAccesssToken(userObj: IUser) {
+  return jwt.sign(
+    {
+      id: userObj._id,
+      role: userObj.roles,
+      email: userObj.email,
+      username: userObj.username,
+    },
+    config.JWT_SECRET,
+    { expiresIn: config.JWT_EXPIRY || "1h" }
+  );
+}
+export function generateRefreshAccesssToken(userObj: IUser) {
+  return jwt.sign(
+    {
+      id: userObj._id,
+      role: userObj.roles,
+      email: userObj.email,
+      username: userObj.username,
+    },
+    config.JWT_REFRESH_SECRET,
+    { expiresIn: config.JWT_REFRESH_EXPIRY || "7d" }
+  );
+}
+export function verifyAccessToken(token: string) {
+  return jwt.verify(token, config.JWT_SECRET);
+}
+export function verifyRefreshToken(token: string) {
+  return jwt.verify(token, config.JWT_REFRESH_SECRET);
+}
