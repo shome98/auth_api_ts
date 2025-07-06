@@ -1,6 +1,12 @@
 import jwt from "jsonwebtoken";
 import config from "../environment/config";
 import { IUser } from "../models/user.model";
+interface IUserJwt {
+  id: string;
+  role: string | string[];
+  email: string;
+  username: string;
+}
 export function generateAccesssToken(userObj: IUser) {
   return jwt.sign(
     {
@@ -26,8 +32,8 @@ export function generateRefreshAccesssToken(userObj: IUser) {
   );
 }
 export function verifyAccessToken(token: string) {
-  return jwt.verify(token, config.JWT_SECRET);
+  return jwt.verify(token, config.JWT_SECRET) as IUserJwt;
 }
 export function verifyRefreshToken(token: string) {
-  return jwt.verify(token, config.JWT_REFRESH_SECRET);
+  return jwt.verify(token, config.JWT_REFRESH_SECRET) as IUserJwt;
 }
