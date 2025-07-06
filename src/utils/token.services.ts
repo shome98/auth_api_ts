@@ -4,7 +4,7 @@ import { IUser } from "../models/user.model";
 export function generateAccesssToken(userObj: IUser) {
   return jwt.sign(
     {
-      id: userObj._id,
+      id: userObj._id ? userObj._id : userObj.id,
       role: userObj.roles,
       email: userObj.email,
       username: userObj.username,
@@ -16,7 +16,7 @@ export function generateAccesssToken(userObj: IUser) {
 export function generateRefreshAccesssToken(userObj: IUser) {
   return jwt.sign(
     {
-      id: userObj._id,
+      id: userObj._id ? userObj._id : userObj.id,
       role: userObj.roles,
       email: userObj.email,
       username: userObj.username,
