@@ -11,7 +11,6 @@ import {
   generateRefreshAccesssToken,
 } from "../utils/token.services";
 import config from "../environment/config";
-import { IRefreshToken } from "../models/refreshToken.model";
 
 export const register = async (req: Request, res: Response) => {
   const reqObj: IUser = req.body;
