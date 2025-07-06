@@ -1,8 +1,9 @@
 import mongoose, { Connection } from "mongoose";
 import dotenv from "dotenv";
+import config from "../environment/config";
 
 dotenv.config();
-const MONGODB_URI = process.env.MONGODB_URI!;
+const MONGODB_URI = config.MONGODB_URI;
 
 if (!MONGODB_URI) {
   throw new Error(
