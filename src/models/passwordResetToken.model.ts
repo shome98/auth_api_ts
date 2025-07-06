@@ -10,6 +10,7 @@ const PasswordResetTokenSchema: Schema<IPasswordResetToken> = new Schema(
   {
     userId: {
       type: String || Schema.Types.ObjectId,
+      ref: "user",
       required: true,
     },
     token: {
@@ -27,5 +28,7 @@ const PasswordResetTokenSchema: Schema<IPasswordResetToken> = new Schema(
   }
 );
 
-export default mongoose.models.PasswordResetToken ||
+const PasswordResetTokenModel =
+  mongoose.models.PasswordResetToken ||
   model<IPasswordResetToken>("PasswordResetToken", PasswordResetTokenSchema);
+export default PasswordResetTokenModel;

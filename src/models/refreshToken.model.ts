@@ -11,6 +11,7 @@ const RefreshTokenSchema: Schema<IRefreshToken> = new Schema(
   {
     userId: {
       type: String || Schema.Types.ObjectId,
+      ref: "user",
       required: true,
     },
     token: {
@@ -22,7 +23,7 @@ const RefreshTokenSchema: Schema<IRefreshToken> = new Schema(
     },
     expiresAt: {
       type: Date,
-      required: true,
+      required: false,
     },
   },
   {
@@ -30,5 +31,7 @@ const RefreshTokenSchema: Schema<IRefreshToken> = new Schema(
   }
 );
 
-export default mongoose.models.RefreshToken ||
+const RefreshTokenModel =
+  mongoose.models.RefreshToken ||
   model<IRefreshToken>("RefreshToken", RefreshTokenSchema);
+export default RefreshTokenModel;
